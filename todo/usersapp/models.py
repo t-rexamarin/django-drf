@@ -14,6 +14,6 @@ class User(AbstractUser):
     active = ActiveUsersManager()
 
     email = models.EmailField(verbose_name='email', unique=True, null=False)
-    birthday_date = models.DateTimeField(null=True, )
+    birthday_date = models.DateTimeField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
