@@ -3,13 +3,15 @@ from usersapp.models import User
 from faker import Faker
 import traceback
 import pytz
-import datetime
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
+        # delete all users from db
+        User.objects.all().delete()
+
         # quantity of test objects
-        USER_QUANTITY = 10
+        USER_QUANTITY = 30
         fake = Faker()
 
         try:
