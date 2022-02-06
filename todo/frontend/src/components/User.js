@@ -1,9 +1,9 @@
 import React from 'react';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
-const UserItem = ({user}) => {
+const UserItem = ({user, i}) => {
     return (
-        <tr>
+        <tr key="{i}">
             <td>
                 {user.username}
             </td>
@@ -29,7 +29,7 @@ const UserList = ({users}) => {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {users.map((user) => <UserItem user={user} />)}
+                    {users.map((user, i) => <UserItem user={user} key={i} />)}
                 </MDBTableBody>
             </MDBTable>
         </div>
