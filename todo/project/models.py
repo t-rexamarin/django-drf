@@ -19,8 +19,12 @@ class Project(models.Model):
 
     name = models.CharField(max_length=80)
     link = models.URLField()
-    users = models.ForeignKey(User, on_delete=models.CASCADE)
+    # users = models.ForeignKey(User, on_delete=models.CASCADE)
+    users = models.ManyToManyField(User)
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Todo(models.Model):
@@ -33,3 +37,6 @@ class Todo(models.Model):
     updated = models.DateTimeField(auto_now=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return f'{self.project} | {self.owner}'
