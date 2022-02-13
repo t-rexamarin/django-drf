@@ -1,4 +1,6 @@
+from django.shortcuts import get_object_or_404
 from djangorestframework_camel_case.render import CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer
+from rest_framework import viewsets
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.generics import RetrieveAPIView, ListAPIView, UpdateAPIView
 from rest_framework.renderers import JSONRenderer
@@ -10,6 +12,34 @@ from .serializers import UserModelSerializer
 
 
 # Create your views here.
+# ViewSet
+class UserViewSet(viewsets.ViewSet):
+    renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
+
+    # http://127.0.0.1:8000/api/users/viewsets/base/
+    def list(self, request):
+        users = User.objects.all()
+        serializer = UserModelSerializer(users, many=True)
+        return Response(serializer.data)
+
+    # http://127.0.0.1:8000/api/users/viewsets/base/196/
+    def retrieve(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        serializer = UserModelSerializer(user)
+        return Response(serializer.data)
+
+    def update(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        serializer = UserModelSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+
+
+
+# закреплял материал
 # http://127.0.0.1:8000/api/users/generic/list/
 # get list
 class UserListAPIView(ListAPIView):
