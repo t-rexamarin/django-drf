@@ -13,6 +13,7 @@ from .serializers import UserModelSerializer
 
 # Create your views here.
 # ViewSet
+# сделать через миксины?
 class UserViewSet(viewsets.ViewSet):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
 
@@ -34,9 +35,6 @@ class UserViewSet(viewsets.ViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
-
-
-
 
 
 # закреплял материал
