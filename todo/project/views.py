@@ -8,6 +8,7 @@ from .serializers import ProjectModelSerializer, TodoModelSerializer
 from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 import django_filters
 
+
 # Create your views here.
 class ProjectSetPagination(PageNumberPagination):
     page_size = 10
@@ -32,7 +33,7 @@ class ProjectViewSet(GenericViewSet):
         # projects = self.paginate_queryset(projects)
         return projects
 
-    # http://127.0.0.1:8000/api/users/viewsets/base/
+    # http://127.0.0.1:8000/api/projects/viewsets/project/
     def list(self, request):
         projects = self.get_queryset()
         page = self.paginate_queryset(projects)
@@ -46,7 +47,7 @@ class ProjectViewSet(GenericViewSet):
         # serializer = ProjectModelSerializer(projects, many=True)
         # return Response(serializer.data)
 
-    # http://127.0.0.1:8000/api/users/viewsets/base/196/
+    # http://127.0.0.1:8000/api/projects/viewsets/project/28/
     def retrieve(self, request, pk):
         project = get_object_or_404(Project, pk=pk)
         serializer = ProjectModelSerializer(project)
@@ -105,7 +106,7 @@ class TodoViewSet(GenericViewSet):
             todos = todos.filter(project__name__contains=project_name)
         return todos
 
-    # http://127.0.0.1:8000/api/users/viewsets/base/
+    # http://127.0.0.1:8000/api/projects/viewsets/todo/
     def list(self, request):
         todos = self.get_queryset()
         page = self.paginate_queryset(todos)
@@ -117,7 +118,7 @@ class TodoViewSet(GenericViewSet):
             serializer = TodoModelSerializer(todos, many=True)
             return Response(serializer.data)
 
-    # http://127.0.0.1:8000/api/users/viewsets/base/196/
+    # http://127.0.0.1:8000/api/projects/viewsets/todo/196/
     def retrieve(self, request, pk):
         todo = get_object_or_404(Todo, pk=pk)
         serializer = TodoModelSerializer(todo)
