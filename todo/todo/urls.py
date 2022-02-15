@@ -21,7 +21,7 @@ from usersapp.views import UserModelViewSet
 
 
 # router = DefaultRouter()
-# # router.register('users', UserModelViewSet)
+# router.register('users', UserModelViewSet)
 # router.register('projects', ProjectModelViewSet)
 # router.register('todos', TodoModelViewSet)
 

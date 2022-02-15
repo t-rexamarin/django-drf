@@ -38,14 +38,28 @@ class ProjectViewSet(ViewSet):
         return Response(response)
 
 
-# class ProjectModelViewSet(ModelViewSet):
-#     queryset = Project.objects.all()
-#     serializer_class = ProjectModelSerializer
-
-
-class TodoModelViewSet(ModelViewSet):
-    queryset = Todo.objects.all()
+class TodoViewSet(ViewSet):
+    renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = TodoModelSerializer
+
+    # http://127.0.0.1:8000/api/users/viewsets/base/
+    def list(self, request):
+        todos = Todo.objects.all()
+        serializer = TodoModelSerializer(todos, many=True)
+        return Response(serializer.data)
+
+    # http://127.0.0.1:8000/api/users/viewsets/base/196/
+    def retrieve(self, request, pk):
+        todo = get_object_or_404(Todo, pk=pk)
+        serializer = TodoModelSerializer(todo)
+        return Response(serializer.data)
+
+    def update(self, request, pk):
+        todo = get_object_or_404(Todo, pk=pk)
+        serializer = TodoModelSerializer(todo, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
     def destroy(self, request, *args, **kwargs):
         todo = Todo.objects.get(pk=self.kwargs['pk'])
@@ -53,3 +67,20 @@ class TodoModelViewSet(ModelViewSet):
         todo.save()
         response = self.serializer_class(todo).data
         return Response(response)
+
+
+# class ProjectModelViewSet(ModelViewSet):
+#     queryset = Project.objects.all()
+#     serializer_class = ProjectModelSerializer
+
+
+# class TodoModelViewSet(ModelViewSet):
+#     queryset = Todo.objects.all()
+#     serializer_class = TodoModelSerializer
+#
+#     def destroy(self, request, *args, **kwargs):
+#         todo = Todo.objects.get(pk=self.kwargs['pk'])
+#         todo.is_active = False
+#         todo.save()
+#         response = self.serializer_class(todo).data
+#         return Response(response)
