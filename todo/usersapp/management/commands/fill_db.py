@@ -16,8 +16,8 @@ class Command(BaseCommand):
 
         # quantity of test objects
         USER_QUANTITY = 30
-        PROJECT_QUANTITY = 5
-        TODOS_QUANTITY = 20
+        PROJECT_QUANTITY = 15
+        TODOS_QUANTITY = 40
         fake = Faker()
 
         try:

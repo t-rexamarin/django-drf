@@ -1,15 +1,24 @@
 from django.shortcuts import get_object_or_404
 from djangorestframework_camel_case.render import CamelCaseBrowsableAPIRenderer, CamelCaseJSONRenderer
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, ViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet, GenericViewSet
 from .models import Project, Todo
 from .serializers import ProjectModelSerializer, TodoModelSerializer
+from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 
 
 # Create your views here.
-class ProjectViewSet(ViewSet):
+class ProjectSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    # я не понимаю на что влияет
+    # max_page_size = 3
+
+
+class ProjectViewSet(GenericViewSet):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = ProjectModelSerializer
+    pagination_class = ProjectSetPagination
 
     def get_queryset(self):
         name = self.request.query_params.get('name', '')
@@ -17,14 +26,24 @@ class ProjectViewSet(ViewSet):
 
         if name:
             projects = projects.filter(name__contains=name)
+
+        # pagination from base settings
+        # projects = self.paginate_queryset(projects)
         return projects
 
     # http://127.0.0.1:8000/api/users/viewsets/base/
     def list(self, request):
-        # projects = Project.objects.all()
         projects = self.get_queryset()
-        serializer = ProjectModelSerializer(projects, many=True)
-        return Response(serializer.data)
+        page = self.paginate_queryset(projects)
+
+        if page:
+            serializer = ProjectModelSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        else:
+            serializer = ProjectModelSerializer(projects, many=True)
+            return Response(serializer.data)
+        # serializer = ProjectModelSerializer(projects, many=True)
+        # return Response(serializer.data)
 
     # http://127.0.0.1:8000/api/users/viewsets/base/196/
     def retrieve(self, request, pk):
@@ -47,9 +66,15 @@ class ProjectViewSet(ViewSet):
         return Response(response)
 
 
-class TodoViewSet(ViewSet):
+class TodoSetPagination(PageNumberPagination):
+    page_size = 20
+    page_size_query_param = 'page_size'
+
+
+class TodoViewSet(GenericViewSet):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = TodoModelSerializer
+    pagination_class = TodoSetPagination
 
     def get_queryset(self):
         project_name = self.request.query_params.get('project_name', '')
@@ -62,8 +87,14 @@ class TodoViewSet(ViewSet):
     # http://127.0.0.1:8000/api/users/viewsets/base/
     def list(self, request):
         todos = self.get_queryset()
-        serializer = TodoModelSerializer(todos, many=True)
-        return Response(serializer.data)
+        page = self.paginate_queryset(todos)
+
+        if page:
+            serializer = TodoModelSerializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        else:
+            serializer = TodoModelSerializer(todos, many=True)
+            return Response(serializer.data)
 
     # http://127.0.0.1:8000/api/users/viewsets/base/196/
     def retrieve(self, request, pk):

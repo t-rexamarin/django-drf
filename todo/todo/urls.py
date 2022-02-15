@@ -20,8 +20,8 @@ from usersapp.views import UserModelViewSet
 # from project.views import ProjectModelViewSet, TodoModelViewSet
 
 
-# router = DefaultRouter()
-# router.register('users', UserModelViewSet)
+router = DefaultRouter()
+router.register('users', UserModelViewSet)
 # router.register('projects', ProjectModelViewSet)
 # router.register('todos', TodoModelViewSet)
 
