@@ -11,16 +11,25 @@ class ProjectViewSet(ViewSet):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = ProjectModelSerializer
 
+    def get_queryset(self):
+        name = self.request.query_params.get('name', '')
+        projects = Project.objects.all()
+
+        if name:
+            projects = projects.filter(name__contains=name)
+        return projects
+
     # http://127.0.0.1:8000/api/users/viewsets/base/
     def list(self, request):
-        projects = Project.objects.all()
+        # projects = Project.objects.all()
+        projects = self.get_queryset()
         serializer = ProjectModelSerializer(projects, many=True)
         return Response(serializer.data)
 
     # http://127.0.0.1:8000/api/users/viewsets/base/196/
     def retrieve(self, request, pk):
-        user = get_object_or_404(Project, pk=pk)
-        serializer = ProjectModelSerializer(user)
+        project = get_object_or_404(Project, pk=pk)
+        serializer = ProjectModelSerializer(project)
         return Response(serializer.data)
 
     def update(self, request, pk):
@@ -42,9 +51,17 @@ class TodoViewSet(ViewSet):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = TodoModelSerializer
 
+    def get_queryset(self):
+        project_name = self.request.query_params.get('project_name', '')
+        todos = Todo.objects.all()
+
+        if project_name:
+            todos = todos.filter(project__name__contains=project_name)
+        return todos
+
     # http://127.0.0.1:8000/api/users/viewsets/base/
     def list(self, request):
-        todos = Todo.objects.all()
+        todos = self.get_queryset()
         serializer = TodoModelSerializer(todos, many=True)
         return Response(serializer.data)
 
