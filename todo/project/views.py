@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from djangorestframework_camel_case.render import CamelCaseBrowsableAPIRenderer, CamelCaseJSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet, GenericViewSet
 from .models import Project, Todo
 from .serializers import ProjectModelSerializer, TodoModelSerializer
 from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
-
+import django_filters
 
 # Create your views here.
 class ProjectSetPagination(PageNumberPagination):
@@ -71,14 +72,34 @@ class TodoSetPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
 
 
+class TodoFilter(django_filters.FilterSet):
+    # created_gte = django_filters.DateFilter(field_name='created', lookup_expr='gte')
+    # created_lte = django_filters.DateFilter(field_name='created', lookup_expr='lte')
+    created_between = django_filters.DateFromToRangeFilter(field_name='created', label='created between')
+
+    class Meta:
+        model = Todo
+        fields = ['created_between']
+
+
 class TodoViewSet(GenericViewSet):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = TodoModelSerializer
     pagination_class = TodoSetPagination
+    # filter_backends = (DjangoFilterBackend,)
+    filterset_class = TodoFilter
 
     def get_queryset(self):
         project_name = self.request.query_params.get('project_name', '')
+        created_between_after = self.request.query_params.get('created_between_after', '')
+        created_between_before = self.request.query_params.get('created_between_before', '')
         todos = Todo.objects.all()
+
+        if created_between_after:
+            todos = todos.filter(created__gte=created_between_after)
+
+        if created_between_before:
+            todos = todos.filter(created__lte=created_between_before)
 
         if project_name:
             todos = todos.filter(project__name__contains=project_name)
