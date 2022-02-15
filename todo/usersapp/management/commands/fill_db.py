@@ -49,7 +49,7 @@ class Command(BaseCommand):
 
             # create projects
             project_name = [fake.unique.company() for _ in range(PROJECT_QUANTITY)]
-            project_link = [f'http://{company.lower().replace(" ", "")}.com' for company in project_name]
+            project_link = [f'http://{company.lower().replace(" ", "").replace(",", "")}.com' for company in project_name]
             project_active = [randint(0, 1) for _ in range(PROJECT_QUANTITY)]
 
             for project, link, proj_active in zip(project_name, project_link, project_active):
