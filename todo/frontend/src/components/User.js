@@ -3,7 +3,7 @@ import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 const UserItem = ({user, i}) => {
     return (
-        <tr key="{i}">
+        <tr key={i}>
             <td>
                 {user.username}
             </td>

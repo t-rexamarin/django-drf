@@ -3,7 +3,7 @@ import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 const ProjectItem = ({project, i}) => {
     return (
-        <tr key="{i}">
+        <tr key={i}>
             <td>
                 {project.name}
             </td>

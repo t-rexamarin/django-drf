@@ -3,7 +3,7 @@ import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 const TodoItem = ({todo, i}) => {
     return (
-        <tr key="{i}">
+        <tr key={i}>
             <td>
                 {todo.project}
             </td>
