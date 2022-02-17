@@ -20,7 +20,7 @@ class ProjectSetPagination(PageNumberPagination):
 class ProjectViewSet(GenericViewSet):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = ProjectModelSerializer
-    pagination_class = ProjectSetPagination
+    # pagination_class = ProjectSetPagination
 
     def get_queryset(self):
         name = self.request.query_params.get('name', '')
@@ -86,7 +86,7 @@ class TodoFilter(django_filters.FilterSet):
 class TodoViewSet(GenericViewSet):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = TodoModelSerializer
-    pagination_class = TodoSetPagination
+    # pagination_class = TodoSetPagination
     # filter_backends = (DjangoFilterBackend,)
     filterset_class = TodoFilter
 
