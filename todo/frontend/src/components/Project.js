@@ -20,7 +20,7 @@ const ProjectItem = ({project, i}) => {
 
 const ProjectList = ({projects}) => {
     return (
-        <div className="container-fluid col-md-6 text-center" style={{marginTop: 58}}>
+        <div className="container-fluid col-md-6 text-center marginTop58">
             <MDBTable hover>
                 <MDBTableHead dark>
                     <tr>
