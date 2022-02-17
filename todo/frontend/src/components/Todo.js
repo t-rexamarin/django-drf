@@ -1,39 +1,43 @@
 import React from 'react';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
-const UserItem = ({user, i}) => {
+const TodoItem = ({todo, i}) => {
     return (
         <tr key="{i}">
             <td>
-                {user.username}
+                {todo.project}
             </td>
             <td>
-                {user.email}
+                {todo.owner}
             </td>
             <td>
-                {user.birthdayDate}
+                {todo.text}
+            </td>
+            <td>
+                {String(todo.isActive)}
             </td>
         </tr>
     )
 }
 
-const UserList = ({users}) => {
+const TodoList = ({todos}) => {
     return (
         <div className="container-fluid col-md-6 text-center" style={{marginTop: 58}}>
             <MDBTable hover>
                 <MDBTableHead dark>
                     <tr>
-                        <th scope="col">Юзернейм</th>
-                        <th scope="col">Почта</th>
-                        <th scope="col">Дата рождения</th>
+                        <th scope="col">Проект</th>
+                        <th scope="col">Автор</th>
+                        <th scope="col">Текст</th>
+                        <th scope="col">Активно</th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {users.map((user, i) => <UserItem user={user} key={i} />)}
+                    {todos.map((todo, i) => <TodoItem todo={todo} key={i} />)}
                 </MDBTableBody>
             </MDBTable>
         </div>
     )
 }
 
-export default UserList;
+export default TodoList;

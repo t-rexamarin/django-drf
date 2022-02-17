@@ -1,39 +1,40 @@
 import React from 'react';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
-const UserItem = ({user, i}) => {
+const ProjectItem = ({project, i}) => {
     return (
         <tr key="{i}">
             <td>
-                {user.username}
+                {project.name}
             </td>
             <td>
-                {user.email}
+                {project.link}
             </td>
             <td>
-                {user.birthdayDate}
+                {/* править костыль */}
+                {project.users.map((user) => user + ', ')}
             </td>
         </tr>
     )
 }
 
-const UserList = ({users}) => {
+const ProjectList = ({projects}) => {
     return (
         <div className="container-fluid col-md-6 text-center" style={{marginTop: 58}}>
             <MDBTable hover>
                 <MDBTableHead dark>
                     <tr>
-                        <th scope="col">Юзернейм</th>
-                        <th scope="col">Почта</th>
-                        <th scope="col">Дата рождения</th>
+                        <th scope="col">Название проекта</th>
+                        <th scope="col">Ссылка на проект</th>
+                        <th scope="col">Участники</th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {users.map((user, i) => <UserItem user={user} key={i} />)}
+                    {projects.map((project, i) => <ProjectItem project={project} key={i} />)}
                 </MDBTableBody>
             </MDBTable>
         </div>
     )
 }
 
-export default UserList;
+export default ProjectList;
