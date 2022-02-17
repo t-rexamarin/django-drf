@@ -7,6 +7,7 @@ import Menu from './components/Menu';
 import Footer from './components/Footer';
 import ProjectList from './components/Project';
 import TodoList from './components/Todo';
+import {HashRouter, Route} from 'react-router-dom';
 
 class App extends React.Component {
     constructor(props) {
@@ -14,7 +15,12 @@ class App extends React.Component {
         this.state = {
             'users': [],
             'projects': [],
-            'todos': []
+            'todos': [],
+            'menuLinks': [
+                {'name': 'Users', 'href': '/'},
+                {'name': 'Projects', 'href': '/projects'},
+                {'name': 'Todos', 'href': '/todos'}
+            ]
         };
     }
 
@@ -46,12 +52,14 @@ class App extends React.Component {
 
     render () {
         return (
-            <div>
-                <Menu />
-                <UserList users={this.state.users} />
-                <ProjectList projects={this.state.projects} />
-                <TodoList todos={this.state.todos} />
-                <Footer />
+            <div className="App">
+                <HashRouter>
+                    <Menu menuLinks={this.state.menuLinks} />
+                    <Route exact path='/' component={() => <UserList users={this.state.users} />} />
+                    <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />
+                    <Route exact path='/todos' component={() => <TodoList todos={this.state.todos} />} />
+                    <Footer />
+                </HashRouter>
             </div>
         );
     }
