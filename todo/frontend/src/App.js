@@ -7,7 +7,17 @@ import Menu from './components/Menu';
 import Footer from './components/Footer';
 import ProjectList from './components/Project';
 import TodoList from './components/Todo';
-import {HashRouter, Route} from 'react-router-dom';
+import {HashRouter, Route, Switch, Redirect} from 'react-router-dom';
+
+
+const NotFound404 = ({location}) => {
+    return (
+        <div className="marginTop58">
+            <h2>Страница  по адресу "{location.pathname}" не найдена</h2>
+        </div>
+    )
+}
+
 
 class App extends React.Component {
     constructor(props) {
@@ -55,9 +65,14 @@ class App extends React.Component {
             <div className="App">
                 <HashRouter>
                     <Menu menuLinks={this.state.menuLinks} />
-                    <Route exact path='/' component={() => <UserList users={this.state.users} />} />
-                    <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />
-                    <Route exact path='/todos' component={() => <TodoList todos={this.state.todos} />} />
+
+                    <Switch>
+                        <Route exact path='/' component={() => <UserList users={this.state.users} />} />
+                        <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />
+                        <Route exact path='/todos' component={() => <TodoList todos={this.state.todos} />} />
+                        <Redirect from='/users' to='/' />
+                        <Route component={NotFound404} />
+                    </Switch>
                     <Footer />
                 </HashRouter>
             </div>
