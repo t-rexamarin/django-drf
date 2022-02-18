@@ -6,6 +6,7 @@ import UserList from './components/User';
 import Menu from './components/Menu';
 import Footer from './components/Footer';
 import ProjectList from './components/Project';
+import GetOneProject from './components/GetOneProject';
 import TodoList from './components/Todo';
 import {HashRouter, Route, Switch, Redirect} from 'react-router-dom';
 
@@ -68,8 +69,14 @@ class App extends React.Component {
 
                     <Switch>
                         <Route exact path='/' component={() => <UserList users={this.state.users} />} />
-                        <Route exact path='/projects' component={() => <ProjectList projects={this.state.projects} />} />
-                        <Route exact path='/todos' component={() => <TodoList todos={this.state.todos} />} />
+                        <Route exact path='/projects' component={() =>
+                            <ProjectList projects={this.state.projects} users={this.state.users}/>} />
+                        <Route exact path='/todos' component={() =>
+                            <TodoList todos={this.state.todos} users={this.state.users}
+                            projects={this.state.projects} />} />
+                        <Route path="/project/:project_id">
+                            <GetOneProject projects={this.state.projects} users={this.state.users}/>
+                        </Route>
                         <Redirect from='/users' to='/' />
                         <Route component={NotFound404} />
                     </Switch>

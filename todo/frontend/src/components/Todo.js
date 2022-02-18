@@ -1,14 +1,14 @@
 import React from 'react';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
-const TodoItem = ({todo, i}) => {
+const TodoItem = ({todo, users, projects, i}) => {
     return (
         <tr key={i}>
             <td>
-                {todo.project}
+                {projects.find(project => project.id == todo.project.toString()).name}
             </td>
             <td>
-                {todo.owner}
+                {users.find(user => user.id == todo.owner.toString()).username}
             </td>
             <td>
                 {todo.text}
@@ -20,7 +20,7 @@ const TodoItem = ({todo, i}) => {
     )
 }
 
-const TodoList = ({todos}) => {
+const TodoList = ({todos, users, projects}) => {
     return (
         <div className="container-fluid col-md-6 text-center marginTop58">
             <MDBTable hover>
@@ -33,7 +33,7 @@ const TodoList = ({todos}) => {
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {todos.map((todo, i) => <TodoItem todo={todo} key={i} />)}
+                    {todos.map((todo, i) => <TodoItem todo={todo} users={users} projects={projects} key={i} />)}
                 </MDBTableBody>
             </MDBTable>
         </div>
