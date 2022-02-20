@@ -17,6 +17,10 @@ from .serializers import UserModelSerializer
 class UserViewSet(viewsets.ViewSet):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
 
+    def get_queryset(self):
+        users = User.objects.all()
+        return users
+
     # http://127.0.0.1:8000/api/users/viewsets/base/
     def list(self, request):
         users = User.objects.all()
