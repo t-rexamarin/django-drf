@@ -6,6 +6,10 @@ const TodoItem = ({todo, users, projects, i}) => {
         <tr key={i}>
             <td>
                 {projects.find(project => project.id == todo.project.toString()).name}
+                {/*{todo.project.map(projectId) => {let project = projects.find(project => project.id == projectId)
+                if (project){
+                    return project.name
+                }}}*/}
             </td>
             <td>
                 {users.find(user => user.id == todo.owner.toString()).username}
