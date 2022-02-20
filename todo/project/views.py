@@ -3,6 +3,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 from djangorestframework_camel_case.render import CamelCaseBrowsableAPIRenderer, CamelCaseJSONRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet, GenericViewSet
+from rest_framework import mixins
+from usersapp.models import User
 from .models import Project, Todo
 from .serializers import ProjectModelSerializer, TodoModelSerializer
 from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
@@ -17,7 +19,7 @@ class ProjectSetPagination(PageNumberPagination):
     # max_page_size = 3
 
 
-class ProjectViewSet(GenericViewSet):
+class ProjectViewSet(GenericViewSet, mixins.CreateModelMixin):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = ProjectModelSerializer
     # pagination_class = ProjectSetPagination
@@ -32,6 +34,22 @@ class ProjectViewSet(GenericViewSet):
         # pagination from base settings
         # projects = self.paginate_queryset(projects)
         return projects
+
+    # пытка сделать свой
+    # уперся в непонимание того, как мультипл чоис с юзерами обработать
+    # только последний попадает
+    # def create(self, request, *args, **kwargs):
+    #     project = Project()
+    #     project.name = request.POST['name']
+    #     project.link = request.POST['link']
+    #     project.is_active = True if request.POST['is_active'] == 'true' else False
+    #     project.save()
+    #     user_pk = request.POST['users']
+    #     user = [User.objects.get(id=int(user_pk))]
+    #     project.users.set(user)
+        # serializer = ProjectModelSerializer(project, data=request.data, partial=True)
+        # serializer.is_valid(raise_exception=True)
+        # return Response(serializer.data)
 
     # http://127.0.0.1:8000/api/projects/viewsets/project/
     def list(self, request):
@@ -83,7 +101,7 @@ class TodoFilter(django_filters.FilterSet):
         fields = ['created_between']
 
 
-class TodoViewSet(GenericViewSet):
+class TodoViewSet(GenericViewSet, mixins.CreateModelMixin):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     serializer_class = TodoModelSerializer
     # pagination_class = TodoSetPagination
