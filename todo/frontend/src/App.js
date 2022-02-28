@@ -8,7 +8,12 @@ import Footer from './components/Footer';
 import ProjectList from './components/Project';
 import GetOneProject from './components/GetOneProject';
 import TodoList from './components/Todo';
+import LoginForm from './components/Auth';
 import {HashRouter, Route, Switch, Redirect} from 'react-router-dom';
+
+
+const DOMAIN = 'http://127.0.0.1:8000/api/'
+const get_url = (url) => `${DOMAIN}${url}`
 
 
 const NotFound404 = ({location}) => {
@@ -30,13 +35,14 @@ class App extends React.Component {
             'menuLinks': [
                 {'name': 'Users', 'href': '/'},
                 {'name': 'Projects', 'href': '/projects'},
-                {'name': 'Todos', 'href': '/todos'}
+                {'name': 'Todos', 'href': '/todos'},
+                {'name': 'Login', 'href': '/login'},
             ]
         };
     }
 
     componentDidMount() {
-        axios.get('http://127.0.0.1:8000/api/users/viewsets/base/').then(response => {
+        axios.get(get_url('users/viewsets/base/')).then(response => {
             const users = response.data;
 
             this.setState({
@@ -44,7 +50,7 @@ class App extends React.Component {
             });
         }).catch(error => console.log(error));
 
-        axios.get('http://127.0.0.1:8000/api/projects/viewsets/project/').then(response => {
+        axios.get(get_url('projects/viewsets/project/')).then(response => {
             const projects = response.data;
 
             this.setState({
@@ -52,7 +58,7 @@ class App extends React.Component {
             });
         }).catch(error => console.log(error));
 
-        axios.get('http://127.0.0.1:8000/api/projects/viewsets/todo/').then(response => {
+        axios.get(get_url('projects/viewsets/todo/')).then(response => {
             const todos = response.data;
 
             this.setState({
@@ -77,6 +83,8 @@ class App extends React.Component {
                         <Route path="/project/:project_id">
                             <GetOneProject projects={this.state.projects} users={this.state.users}/>
                         </Route>
+                        <Route exact path='/login' component={() => <LoginForm />} />
+
                         <Redirect from='/users' to='/' />
                         <Route component={NotFound404} />
                     </Switch>
