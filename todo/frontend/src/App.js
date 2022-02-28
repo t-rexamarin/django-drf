@@ -9,10 +9,11 @@ import ProjectList from './components/Project';
 import GetOneProject from './components/GetOneProject';
 import TodoList from './components/Todo';
 import LoginForm from './components/Auth';
+import Cookies from 'universal-cookie';
 import {HashRouter, Route, Switch, Redirect} from 'react-router-dom';
 
 
-const DOMAIN = 'http://127.0.0.1:8000/api/'
+const DOMAIN = 'http://127.0.0.1:8000/'
 const get_url = (url) => `${DOMAIN}${url}`
 
 
@@ -37,12 +38,33 @@ class App extends React.Component {
                 {'name': 'Projects', 'href': '/projects'},
                 {'name': 'Todos', 'href': '/todos'},
                 {'name': 'Login', 'href': '/login'},
-            ]
+            ],
+            'token': '',
         };
     }
 
+    set_token(token){
+        const cookies = new Cookies()
+        cookies.set('token', token)
+        this.setState({'token': token})
+//        localStorage.setItem('token', token)
+//        let token_ = localStorage.getItem('token')
+//        document.cookie = `token=${token}`
+    }
+
+    get_token(username, password){
+        axios.post(get_url('api-token-auth/'), {
+            username: username,
+            password: password
+        }).then(response => {
+            //console.log(response.data['token'])
+            this.set_token(response.data['token'])
+        }).catch(error => console.log(error));
+        // console.log('APP ' + username + ' ' + password)
+    }
+
     componentDidMount() {
-        axios.get(get_url('users/viewsets/base/')).then(response => {
+        axios.get(get_url('api/users/viewsets/base/')).then(response => {
             const users = response.data;
 
             this.setState({
@@ -50,7 +72,7 @@ class App extends React.Component {
             });
         }).catch(error => console.log(error));
 
-        axios.get(get_url('projects/viewsets/project/')).then(response => {
+        axios.get(get_url('api/projects/viewsets/project/')).then(response => {
             const projects = response.data;
 
             this.setState({
@@ -58,7 +80,7 @@ class App extends React.Component {
             });
         }).catch(error => console.log(error));
 
-        axios.get(get_url('projects/viewsets/todo/')).then(response => {
+        axios.get(get_url('api/projects/viewsets/todo/')).then(response => {
             const todos = response.data;
 
             this.setState({
@@ -81,9 +103,11 @@ class App extends React.Component {
                             <TodoList todos={this.state.todos} users={this.state.users}
                             projects={this.state.projects} />} />
                         <Route path="/project/:project_id">
-                            <GetOneProject projects={this.state.projects} users={this.state.users}/>
+                            <GetOneProject projects={this.state.projects} users={this.state.users} />
                         </Route>
-                        <Route exact path='/login' component={() => <LoginForm />} />
+                        <Route exact path='/login'
+                            component={() => <LoginForm
+                                get_token={(username, password) => this.get_token(username, password)} />} />
 
                         <Redirect from='/users' to='/' />
                         <Route component={NotFound404} />
