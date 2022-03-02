@@ -37,16 +37,69 @@ class App extends React.Component {
                 {'name': 'Users', 'href': '/'},
                 {'name': 'Projects', 'href': '/projects'},
                 {'name': 'Todos', 'href': '/todos'},
-                {'name': 'Login', 'href': '/login'},
+                //{'name': 'Login', 'href': '/login'},
             ],
             'token': '',
         };
     }
 
+//    logout(){
+//        this.set_token('')
+//        console.log('no token')
+//        this.state.menuLinks[3] = {'name': 'Login', 'href': '/login'}
+//    }
+    handleLogout(event){
+        event.preventDefault()
+        console.log('no token')
+        this.set_token('')
+        this.state.menuLinks[3] = {'name': 'Login', 'href': '/login'}
+    }
+
+    load_data(){
+        const headers = this.get_headers()
+
+        axios.get(get_url('api/users/viewsets/base/'), {headers}).then(response => {
+            const users = response.data;
+
+            this.setState({
+                'users': users
+            });
+        }).catch(error => console.log(error));
+
+        axios.get(get_url('api/projects/viewsets/project/'), {headers}).then(response => {
+            const projects = response.data;
+
+            this.setState({
+                'projects': projects
+            });
+        }).catch(error => console.log(error));
+
+        axios.get(get_url('api/projects/viewsets/todo/'), {headers}).then(response => {
+            const todos = response.data;
+
+            this.setState({
+                'todos': todos
+            });
+        }).catch(error => console.log(error));
+
+//        this.state.menuLinks[3] = {'name': 'Logout', 'href': '/'}
+    }
+
+    is_auth(){
+        console.log(!!this.state.token)
+        return !!this.state.token
+    }
+
+    get_token_from_cookies(){
+        const cookies = new Cookies()
+        const token = cookies.get('token')
+        this.setState({'token': token}, () => this.load_data())
+    }
+
     set_token(token){
         const cookies = new Cookies()
         cookies.set('token', token)
-        this.setState({'token': token})
+        this.setState({'token': token}, () => this.load_data())
 //        localStorage.setItem('token', token)
 //        let token_ = localStorage.getItem('token')
 //        document.cookie = `token=${token}`
@@ -63,37 +116,27 @@ class App extends React.Component {
         // console.log('APP ' + username + ' ' + password)
     }
 
+    get_headers(){
+        let headers = {
+            'Content-Type':'application/json'
+        }
+
+        if(this.is_auth()){
+            headers['Authorization'] = `Token ${this.state.token}`
+        }
+
+        return headers
+    }
+
     componentDidMount() {
-        axios.get(get_url('api/users/viewsets/base/')).then(response => {
-            const users = response.data;
-
-            this.setState({
-                'users': users
-            });
-        }).catch(error => console.log(error));
-
-        axios.get(get_url('api/projects/viewsets/project/')).then(response => {
-            const projects = response.data;
-
-            this.setState({
-                'projects': projects
-            });
-        }).catch(error => console.log(error));
-
-        axios.get(get_url('api/projects/viewsets/todo/')).then(response => {
-            const todos = response.data;
-
-            this.setState({
-                'todos': todos
-            });
-        }).catch(error => console.log(error));
+        this.get_token_from_cookies()
     }
 
     render () {
         return (
             <div className="App">
                 <HashRouter>
-                    <Menu menuLinks={this.state.menuLinks} />
+                    <Menu menuLinks={this.state.menuLinks} is_auth={this.is_auth()} />
 
                     <Switch>
                         <Route exact path='/' component={() => <UserList users={this.state.users} />} />
@@ -108,7 +151,6 @@ class App extends React.Component {
                         <Route exact path='/login'
                             component={() => <LoginForm
                                 get_token={(username, password) => this.get_token(username, password)} />} />
-
                         <Redirect from='/users' to='/' />
                         <Route component={NotFound404} />
                     </Switch>

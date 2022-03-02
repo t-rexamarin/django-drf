@@ -9,7 +9,7 @@ const MenuItem = ({menuLink, i}) => {
     )
 }
 
-const Menu = ({menuLinks}) => {
+const Menu = ({menuLinks, is_auth}) => {
     return (
         <header>
             <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top">
@@ -28,6 +28,17 @@ const Menu = ({menuLinks}) => {
                     <div className="collapse navbar-collapse" id="navbarExample01">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             {menuLinks.map((menuLink, i) => <MenuItem menuLink={menuLink} key={i}/>)}
+                            {
+                                is_auth ? (
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to='/'>Logout</Link>
+                                    </li>
+                                ) : (
+                                    <li className="nav-item">
+                                        <Link className="nav-link" to='/login'>Login</Link>
+                                    </li>
+                                )
+                            }
                         </ul>
                     </div>
                 </div>
