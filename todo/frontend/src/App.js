@@ -10,7 +10,7 @@ import GetOneProject from './components/GetOneProject';
 import TodoList from './components/Todo';
 import LoginForm from './components/Auth';
 import Cookies from 'universal-cookie';
-import {HashRouter, Route, Switch, Redirect} from 'react-router-dom';
+import {HashRouter, Route, Switch, Redirect, Link} from 'react-router-dom';
 
 
 const DOMAIN = 'http://127.0.0.1:8000/'
@@ -40,19 +40,13 @@ class App extends React.Component {
                 //{'name': 'Login', 'href': '/login'},
             ],
             'token': '',
+            'username': '',
         };
     }
 
-//    logout(){
-//        this.set_token('')
-//        console.log('no token')
-//        this.state.menuLinks[3] = {'name': 'Login', 'href': '/login'}
-//    }
-    handleLogout(event){
-        event.preventDefault()
-        console.log('no token')
+    logout = () => {
         this.set_token('')
-        this.state.menuLinks[3] = {'name': 'Login', 'href': '/login'}
+//        console.log('no token')
     }
 
     load_data(){
@@ -97,8 +91,8 @@ class App extends React.Component {
     }
 
     set_token(token){
-        const cookies = new Cookies()
-        cookies.set('token', token)
+//        const cookies = new Cookies()
+//        cookies.set('token', token)
         this.setState({'token': token}, () => this.load_data())
 //        localStorage.setItem('token', token)
 //        let token_ = localStorage.getItem('token')
@@ -110,8 +104,9 @@ class App extends React.Component {
             username: username,
             password: password
         }).then(response => {
-            //console.log(response.data['token'])
+//            console.log(response.data['token'])
             this.set_token(response.data['token'])
+            this.setState({'username': username})
         }).catch(error => console.log(error));
         // console.log('APP ' + username + ' ' + password)
     }
@@ -132,11 +127,61 @@ class App extends React.Component {
         this.get_token_from_cookies()
     }
 
+    menuLinkReturn = (link) => {
+        return(
+            <li className="nav-item">
+                <Link className="nav-link" to={link.href}>{link.name}</Link>
+            </li>
+        )
+    }
+
+    loginLogoutButton = (is_auth) => {
+        if(is_auth){
+            return (
+                <li className="nav-item">
+                    <Link className="nav-link" to="#" onClick={this.logout}>Logout ({this.state.username})</Link>
+                </li>
+            )
+        } else {
+            return (
+                <li className="nav-item">
+                    <Link className="nav-link" to="/login">Login</Link>
+                </li>
+            )
+        }
+    }
+
+    menu = () => (
+        <header>
+            <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+                <div className="container-fluid">
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#navbarExample01"
+                        aria-controls="navbarExample01"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <i className="fas fa-bars"></i>
+                    </button>
+                    <div className="collapse navbar-collapse" id="navbarExample01">
+                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                            {this.state.menuLinks.map((menuLink) => this.menuLinkReturn(menuLink))}
+                            {this.loginLogoutButton(this.is_auth())}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    );
+
     render () {
         return (
             <div className="App">
                 <HashRouter>
-                    <Menu menuLinks={this.state.menuLinks} is_auth={this.is_auth()} />
+                    {this.menu()}
 
                     <Switch>
                         <Route exact path='/' component={() => <UserList users={this.state.users} />} />
