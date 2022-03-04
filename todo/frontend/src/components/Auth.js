@@ -6,7 +6,13 @@ import {
   MDBCheckbox,
   MDBBtn
 } from 'mdb-react-ui-kit';
+import {useHistory} from 'react-router-dom';
 
+
+const IndexRedirect = () => {
+    let history = useHistory();
+    history.push('/');
+}
 
 class LoginForm extends React.Component{
     constructor(props){
@@ -21,13 +27,13 @@ class LoginForm extends React.Component{
         this.setState({
             [event.target.name] : event.target.value
         });
-        //console.log([event.target.name] + ' ' + event.target.value);
     }
 
     handleSubmit(event){
-        this.props.get_token(this.state.login, this.state.password)
-        event.preventDefault()
-        // console.log(this.state.login + ' ' + this.state.password)
+
+        this.props.get_token(this.state.login, this.state.password);
+        event.preventDefault();
+        {/*IndexRedirect();*/}
     }
 
     render(){

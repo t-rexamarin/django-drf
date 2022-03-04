@@ -195,7 +195,7 @@ class App extends React.Component {
                         </Route>
                         <Route exact path='/login'
                             component={() => <LoginForm
-                                get_token={(username, password) => this.get_token(username, password)} />} />
+                                get_token={(username, password) => this.get_token(username, password)} is_auth={this.is_auth} />} />
                         <Redirect from='/users' to='/' />
                         <Route component={NotFound404} />
                     </Switch>

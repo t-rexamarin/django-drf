@@ -2,17 +2,38 @@ import React from 'react';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
 
 const TodoItem = ({todo, users, projects, i}) => {
+    let project = () => {
+        let project_name = projects.find(project => project.id == todo.project)
+        if(project_name){
+            return project_name.name
+        }
+    }
+
+    let user = () => {
+                        let proj_owner = users.find(user_obj => user_obj.id == todo.owner)
+                        if(proj_owner){
+                            return proj_owner.username
+                        }
+                    }
+
     return (
         <tr key={i}>
             <td>
-                {projects.find(project => project.id == todo.project.toString()).name}
-                {/*{todo.project.map(projectId) => {let project = projects.find(project => project.id == projectId)
-                if (project){
-                    return project.name
-                }}}*/}
+               {/* {projects.find(project => project.id == todo.project.toString()).name}*/}
+               {/* {projects.find(project => project.id == todo.project.toString())}*/}
+               {/* {todo.project}*/}
+               {project()}
             </td>
             <td>
-                {users.find(user => user.id == todo.owner.toString()).username}
+                {user()}
+                {/* {users.map((userID) => {
+                    let user = users.find(userID => userID.id == todo.owner)
+
+                    if(user){
+                        return user
+                    }
+                }).username}*/}
+                {/* {todo.owner}*/}
             </td>
             <td>
                 {todo.text}
