@@ -10,7 +10,8 @@ application = get_wsgi_application()
 from dateutil.tz import tzoffset
 from django.test import TestCase
 from rest_framework import status
-from rest_framework.test import APIRequestFactory, force_authenticate, APIClient, APISimpleTestCase, APITestCase
+from rest_framework.test import APIRequestFactory, force_authenticate, APIClient,\
+    APISimpleTestCase, APITestCase, CoreAPIClient
 from usersapp.views import UserModelViewSet
 from usersapp.models import User
 
@@ -172,3 +173,31 @@ class TestProject(APITestCase):
         self.assertEqual(project_.name, proj_name_new)
         self.client.logout()
 # <-- APITestCase -->
+
+
+# <-- CoreAPIClient -->
+class UserLiveTest(TestCase):
+    def setUp(self):
+        self.admin_name = 'django'
+        self.admin_pass = '1'
+        self.admin_email = 'admin@email.admin'
+        self.admin = User.objects.create_superuser(self.admin_name, self.admin_email, self.admin_pass)
+        self.url = 'http://127.0.0.1:8000/api/users/viewsets/base/'
+
+        self.data = {
+            'username': 'test_username',
+            'first_name': 'test_first_name',
+            'last_name': 'test_last_name',
+            'email': 'test@test.test',
+            #'birthday_date': datetime(1990, 9, 9, tzinfo=tzoffset('Europe/Moscow', 3*60*60)),
+            'password': '1'
+        }
+
+    def test_live_user(self):
+        client = CoreAPIClient()
+        schema = client.get(self.url)
+        client.action(schema, ['base', 'create'], self.data)
+
+        data = client.action(schema, ['base', 'create'])
+        assert(len(data) == 1)
+# <-- CoreAPIClient -->
