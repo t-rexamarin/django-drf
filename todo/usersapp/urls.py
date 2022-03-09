@@ -14,7 +14,7 @@ router.register('base', UserViewSet, basename='user')
 # - update
 urlpatterns = [
     path('viewsets/', include(router.urls)),
-    path('generic/list/', UserListAPIView.as_view()),
-    path('generic/retrieve/<int:pk>/', UserRetrieveAPIView.as_view()),
-    path('generic/update/<int:pk>/', UserUpdateAPIView.as_view()),
+    # path('generic/list/', UserListAPIView.as_view()),
+    # path('generic/retrieve/<int:pk>/', UserRetrieveAPIView.as_view()),
+    # path('generic/update/<int:pk>/', UserUpdateAPIView.as_view()),
 ]

@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAdminUser
 from .models import User
-from .serializers import UserModelSerializer
+from .serializers import UserModelSerializer, UserExtendedModelSerializer
 
 
 # Create your views here.
@@ -26,7 +26,12 @@ class UserViewSet(viewsets.ViewSet):
     # http://127.0.0.1:8000/api/users/viewsets/base/
     def list(self, request):
         users = User.objects.all()
-        serializer = UserModelSerializer(users, many=True)
+
+        if request.version == 'v2':
+            serializer = UserExtendedModelSerializer(users, many=True)
+        else:
+            serializer = UserModelSerializer(users, many=True)
+
         return Response(serializer.data)
 
     # http://127.0.0.1:8000/api/users/viewsets/base/196/
@@ -43,13 +48,21 @@ class UserViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
+
+
+
 # закреплял материал
 # http://127.0.0.1:8000/api/users/generic/list/
 # get list
 class UserListAPIView(ListAPIView):
     renderer_classes = [CamelCaseJSONRenderer, CamelCaseBrowsableAPIRenderer]
     queryset = User.objects.all()
-    serializer_class = UserModelSerializer
+    # serializer_class = UserModelSerializer
+
+    def get_serializer_class(self):
+        if self.request.version == 'v2':
+            return UserExtendedModelSerializer
+        return UserModelSerializer
 
 
 # http://127.0.0.1:8000/api/users/generic/retrieve/197/
@@ -73,20 +86,20 @@ class UserModelViewSet(ModelViewSet):
     serializer_class = UserModelSerializer
 
 
-class UserAPIView(APIView):
-    renderer_classes = [CamelCaseJSONRenderer]
-
-    def get(self, request, format=None):
-        users = User.objects.all()
-        serializer = UserModelSerializer(users, many=True)
-        return Response(serializer.data)
-
-
-# TODO:
-# возвращает 404, почему?
-@api_view(['GET'])
-@renderer_classes([JSONRenderer])
-def user_view(request):
-    users = User.objects.all()
-    serializer = UserModelSerializer(users, many=True)
-    return Response(serializer.data)
+# class UserAPIView(APIView):
+#     renderer_classes = [CamelCaseJSONRenderer]
+#
+#     def get(self, request, format=None):
+#         users = User.objects.all()
+#         serializer = UserModelSerializer(users, many=True)
+#         return Response(serializer.data)
+#
+#
+# # TODO:
+# # возвращает 404, почему?
+# @api_view(['GET'])
+# @renderer_classes([JSONRenderer])
+# def user_view(request):
+#     users = User.objects.all()
+#     serializer = UserModelSerializer(users, many=True)
+#     return Response(serializer.data)
