@@ -32,8 +32,6 @@ CORS_ALLOWED_ORIGINS = [
    "http://127.0.0.1:3000",
 ]
 
-# Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,13 +40,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+
     'usersapp',
-    'corsheaders',
     'project',
+
+    'corsheaders',
     'django_filters',
     'rest_framework.authtoken',
     'drf_yasg',
+    'graphene_django',
+
 ]
+# Application definition
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -175,3 +179,8 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+GRAPHENE = {
+    'SCHEMA': 'todo.schema.schema',
+}

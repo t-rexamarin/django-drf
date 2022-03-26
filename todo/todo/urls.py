@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from graphene_django.views import GraphQLView
 from rest_framework import permissions
 from rest_framework.routers import DefaultRouter
 from userapp_api.views import UserApiListAPIView
@@ -65,4 +66,6 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc')),
     # без
     path('swagger<str:format>', schema_view.without_ui()),
+
+    path('graphql/', GraphQLView.as_view(graphiql=True)),
 ]
