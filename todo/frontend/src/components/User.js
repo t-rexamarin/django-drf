@@ -19,7 +19,7 @@ const UserItem = ({user, i}) => {
 
 const UserList = ({users}) => {
     return (
-        <div className="container-fluid col-md-6 text-center marginTop58">
+        <div className="container-fluid col-md-6 text-center marginTopBottom58">
             <MDBTable hover>
                 <MDBTableHead dark>
                     <tr>

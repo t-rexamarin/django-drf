@@ -1,7 +1,7 @@
 import React from 'react';
-import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import { MDBTable, MDBTableHead, MDBTableBody, MDBBtn } from 'mdb-react-ui-kit';
 
-const TodoItem = ({todo, users, projects, i}) => {
+const TodoItem = ({todo, users, projects, i, deleteTodo}) => {
     let project = () => {
         let project_name = projects.find(project => project.id == todo.project)
         if(project_name){
@@ -41,13 +41,16 @@ const TodoItem = ({todo, users, projects, i}) => {
             <td>
                 {String(todo.isActive)}
             </td>
+            <td>
+                <MDBBtn color='warning' onClick={() => deleteTodo(todo.id)}>Delete</MDBBtn>
+            </td>
         </tr>
     )
 }
 
-const TodoList = ({todos, users, projects}) => {
+const TodoList = ({todos, users, projects, deleteTodo}) => {
     return (
-        <div className="container-fluid col-md-6 text-center marginTop58">
+        <div className="container-fluid col-md-6 text-center marginTopBottom58">
             <MDBTable hover>
                 <MDBTableHead dark>
                     <tr>
@@ -55,10 +58,12 @@ const TodoList = ({todos, users, projects}) => {
                         <th scope="col">Автор</th>
                         <th scope="col">Текст</th>
                         <th scope="col">Активно</th>
+                        <th scope="col"></th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {todos.map((todo, i) => <TodoItem todo={todo} users={users} projects={projects} key={i} />)}
+                    {todos.map((todo, i) => <TodoItem todo={todo} users={users} projects={projects} key={i}
+                    deleteTodo={deleteTodo} />)}
                 </MDBTableBody>
             </MDBTable>
         </div>

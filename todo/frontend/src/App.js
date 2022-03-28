@@ -151,6 +151,15 @@ class App extends React.Component {
         }
     }
 
+    // меня не физическое удаление, а ставит is_active = false
+    deleteTodo(id) {
+        const headers = this.get_headers()
+        axios.delete(get_url(`api/projects/viewsets/todo/${id}`), {headers}).then(
+        response => {
+            this.load_data()
+        }).catch(error => console.log(error));
+    }
+
     menu = () => (
         <header>
             <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top">
@@ -188,8 +197,8 @@ class App extends React.Component {
                         <Route exact path='/projects' component={() =>
                             <ProjectList projects={this.state.projects} users={this.state.users}/>} />
                         <Route exact path='/todos' component={() =>
-                            <TodoList todos={this.state.todos} users={this.state.users}
-                            projects={this.state.projects} />} />
+                            <TodoList todos={this.state.todos} users={this.state.users} projects={this.state.projects}
+                            deleteTodo={(id) => this.deleteTodo(id)}/>} />
                         <Route path="/project/:project_id">
                             <GetOneProject projects={this.state.projects} users={this.state.users} />
                         </Route>

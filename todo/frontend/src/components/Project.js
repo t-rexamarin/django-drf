@@ -35,7 +35,7 @@ const ProjectItem = ({project, users, i}) => {
 
 const ProjectList = ({projects, users}) => {
     return (
-        <div className="container-fluid col-md-6 text-center marginTop58">
+        <div className="container-fluid col-md-6 text-center marginTopBottom58">
             <MDBTable hover>
                 <MDBTableHead dark>
                     <tr>
