@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MDBTable, MDBTableHead, MDBTableBody, MDBBtn } from 'mdb-react-ui-kit';
 
 const TodoItem = ({todo, users, projects, i, deleteTodo}) => {
@@ -66,6 +67,7 @@ const TodoList = ({todos, users, projects, deleteTodo}) => {
                     deleteTodo={deleteTodo} />)}
                 </MDBTableBody>
             </MDBTable>
+            <Link to='/todos/create'>Create Todo</Link>
         </div>
     )
 }
