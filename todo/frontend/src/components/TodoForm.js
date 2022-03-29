@@ -66,7 +66,7 @@ class TodoForm extends React.Component {
     render() {
         return (
             <div className='marginTopBottom58 container-fluid col-md-6 text-center'>
-                <p className='pt-2 mb-2'>Create Todo Form</p>
+                <p className='pt-2 mb-2'>Todo creation form</p>
                 <form className='form-inline' onSubmit={(event) => this.handleSubmit(event)}>
                     {/* <MDBInput className='mb-4' type='text' name='project' label='Project'
                          onChange={(event) => this.handleChange(event)} />*/}

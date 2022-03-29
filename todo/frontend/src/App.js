@@ -10,6 +10,7 @@ import GetOneProject from './components/GetOneProject';
 import TodoList from './components/Todo';
 import LoginForm from './components/Auth';
 import TodoForm from './components/TodoForm';
+import ProjectForm from './components/ProjectForm';
 import Cookies from 'universal-cookie';
 import {HashRouter, Route, Switch, Redirect, Link} from 'react-router-dom';
 
@@ -162,6 +163,16 @@ class App extends React.Component {
         ).catch(error => console.log(error));
     }
 
+    createProject(name, link, users) {
+        const headers = this.get_headers()
+        const data = {name: name, link: link, users: users}
+        axios.post(get_url('api/projects/viewsets/project/'), data, {headers}).then(
+            response => {
+                this.load_data()
+            }
+        ).catch(error => console.log(error));
+    }
+
     // меня не физическое удаление, а ставит is_active = false
     deleteTodo(id) {
         const headers = this.get_headers()
@@ -207,6 +218,9 @@ class App extends React.Component {
                         <Route exact path='/' component={() => <UserList users={this.state.users} />} />
                         <Route exact path='/projects' component={() =>
                             <ProjectList projects={this.state.projects} users={this.state.users}/>} />
+                        <Route exact path='/projects/create' component={() =>
+                            <ProjectForm users={this.state.users}
+                            createProject={(name, link, users) => this.createProject(name, link, users)}/>} />
                         <Route exact path='/todos' component={() =>
                             <TodoList todos={this.state.todos} users={this.state.users} projects={this.state.projects}
                             deleteTodo={(id) => this.deleteTodo(id)}/>} />

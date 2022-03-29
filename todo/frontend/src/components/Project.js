@@ -48,6 +48,7 @@ const ProjectList = ({projects, users}) => {
                     {projects.map((project, i) => <ProjectItem project={project} users={users} key={i} />)}
                 </MDBTableBody>
             </MDBTable>
+            <Link to='/projects/create'>Create Todo</Link>
         </div>
     )
 }
