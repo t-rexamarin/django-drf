@@ -59,7 +59,7 @@ const TodoList = ({todos, users, projects, deleteTodo}) => {
                         <th scope="col">Автор</th>
                         <th scope="col">Текст</th>
                         <th scope="col">Активно</th>
-                        <th scope="col"></th>
+                        <th scope="col">Удаление</th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
