@@ -1,18 +1,9 @@
 import React from 'react';
 import {
   MDBInput,
-  MDBCol,
-  MDBRow,
-  MDBCheckbox,
   MDBBtn
 } from 'mdb-react-ui-kit';
-import {useHistory} from 'react-router-dom';
 
-
-const IndexRedirect = () => {
-    let history = useHistory();
-    history.push('/');
-}
 
 class LoginForm extends React.Component{
     constructor(props){
@@ -33,7 +24,6 @@ class LoginForm extends React.Component{
 
         this.props.get_token(this.state.login, this.state.password);
         event.preventDefault();
-        {/*IndexRedirect();*/}
     }
 
     render(){

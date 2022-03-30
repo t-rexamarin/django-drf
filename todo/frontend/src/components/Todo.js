@@ -4,14 +4,14 @@ import { MDBTable, MDBTableHead, MDBTableBody, MDBBtn } from 'mdb-react-ui-kit';
 
 const TodoItem = ({todo, users, projects, i, deleteTodo}) => {
     let project = () => {
-        let project_name = projects.find(project => project.id == todo.project)
+        let project_name = projects.find(project => project.id === todo.project)
         if(project_name){
             return project_name.name
         }
     }
 
     let user = () => {
-                        let proj_owner = users.find(user_obj => user_obj.id == todo.owner)
+                        let proj_owner = users.find(user_obj => user_obj.id === todo.owner)
                         if(proj_owner){
                             return proj_owner.username
                         }

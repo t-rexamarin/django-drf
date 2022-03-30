@@ -1,6 +1,6 @@
 import React from 'react';
 import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
-import {Link, useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const GetOneProjectItem = ({project, users, i}) => {
     return (
@@ -14,7 +14,7 @@ const GetOneProjectItem = ({project, users, i}) => {
             <td>
 
                 {/*{project.users.map((user) => user + ', ')}*/}
-                {project.users.map((userID) => {return users.find(user => user.id == userID).username}).join(', ')}
+                {project.users.map((userID) => {return users.find(user => user.id === userID).username}).join(', ')}
                 {/*{console.log(users.find(user => user.id == 198).username)}*/}
             </td>
         </tr>
@@ -24,7 +24,7 @@ const GetOneProjectItem = ({project, users, i}) => {
 
 const GetOneProject = ({projects, users}) => {
     let {project_id} = useParams();
-    let filtered_project_id = projects.filter((project) => project.id == project_id);
+    let filtered_project_id = projects.filter((project) => project.id === project_id);
 
     return (
         <div className="container-fluid col-md-6 text-center marginTop58">
