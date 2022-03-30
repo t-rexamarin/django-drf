@@ -1,8 +1,8 @@
 import React from 'react';
-import { MDBTable, MDBTableHead, MDBTableBody } from 'mdb-react-ui-kit';
+import { MDBTable, MDBTableHead, MDBTableBody, MDBBtn } from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom';
 
-const ProjectItem = ({project, users, i}) => {
+const ProjectItem = ({project, users, i, deleteProject}) => {
     let users_arr = []
     let users_f = () => {
         project.users.map(userID => {
@@ -28,11 +28,17 @@ const ProjectItem = ({project, users, i}) => {
             <td>
                 {users_f()}
             </td>
+            <td>
+                {String(project.isActive)}
+            </td>
+            <td>
+                <MDBBtn color='warning' onClick={() => deleteProject(project.id)}>Delete</MDBBtn>
+            </td>
         </tr>
     )
 }
 
-const ProjectList = ({projects, users}) => {
+const ProjectList = ({projects, users, deleteProject}) => {
     return (
         <div className="container-fluid col-md-6 text-center marginTopBottom58">
             <MDBTable hover>
@@ -41,13 +47,16 @@ const ProjectList = ({projects, users}) => {
                         <th scope="col">Название проекта</th>
                         <th scope="col">Ссылка на проект</th>
                         <th scope="col">Участники</th>
+                        <th scope="col">Активно</th>
+                        <th scope="col">Удаление</th>
                     </tr>
                 </MDBTableHead>
                 <MDBTableBody>
-                    {projects.map((project, i) => <ProjectItem project={project} users={users} key={i} />)}
+                    {projects.map((project, i) => <ProjectItem project={project} users={users} key={i}
+                    deleteProject={deleteProject} />)}
                 </MDBTableBody>
             </MDBTable>
-            <Link to='/projects/create'>Create Todo</Link>
+            <Link to='/projects/create'>Create Project</Link>
         </div>
     )
 }

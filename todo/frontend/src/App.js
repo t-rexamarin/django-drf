@@ -182,6 +182,14 @@ class App extends React.Component {
         }).catch(error => console.log(error));
     }
 
+    deleteProject(id) {
+        const headers = this.get_headers()
+        axios.delete(get_url(`api/projects/viewsets/project/${id}`), {headers}).then(
+        response => {
+            this.load_data()
+        }).catch(error => console.log(error));
+    }
+
     menu = () => (
         <header>
             <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top">
@@ -217,16 +225,17 @@ class App extends React.Component {
                     <Switch>
                         <Route exact path='/' component={() => <UserList users={this.state.users} />} />
                         <Route exact path='/projects' component={() =>
-                            <ProjectList projects={this.state.projects} users={this.state.users}/>} />
+                            <ProjectList projects={this.state.projects} users={this.state.users}
+                            deleteProject={(id) => this.deleteProject(id)} />} />
                         <Route exact path='/projects/create' component={() =>
                             <ProjectForm users={this.state.users}
-                            createProject={(name, link, users) => this.createProject(name, link, users)}/>} />
+                            createProject={(name, link, users) => this.createProject(name, link, users)} />} />
                         <Route exact path='/todos' component={() =>
                             <TodoList todos={this.state.todos} users={this.state.users} projects={this.state.projects}
-                            deleteTodo={(id) => this.deleteTodo(id)}/>} />
+                            deleteTodo={(id) => this.deleteTodo(id)} />} />
                         <Route exact path='/todos/create' component={() =>
                             <TodoForm projects={this.state.projects} users={this.state.users}
-                                createTodo={(owner, project, text) => this.createTodo(owner, project, text)}/>} />
+                                createTodo={(owner, project, text) => this.createTodo(owner, project, text)} />} />
                         <Route path="/project/:project_id">
                             <GetOneProject projects={this.state.projects} users={this.state.users} />
                         </Route>

@@ -81,6 +81,7 @@ class ProjectViewSet(GenericViewSet, mixins.CreateModelMixin):
     def destroy(self, request, *args, **kwargs):
         project = Project.objects.get(pk=self.kwargs['pk'])
         project.is_active = False
+        project.todo_set.update(is_active=False)
         project.save()
         response = self.serializer_class(project).data
         return Response(response)
