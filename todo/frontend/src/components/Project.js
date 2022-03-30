@@ -56,7 +56,7 @@ const ProjectList = ({projects, users, deleteProject}) => {
                     deleteProject={deleteProject} />)}
                 </MDBTableBody>
             </MDBTable>
-            <Link to='/projects/create'>Create Project</Link>
+            <MDBBtn tag="a" color="info" href="#/projects/create" className="marginBottom16">Create project</MDBBtn>
         </div>
     )
 }

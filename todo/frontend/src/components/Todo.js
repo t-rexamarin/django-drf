@@ -67,7 +67,7 @@ const TodoList = ({todos, users, projects, deleteTodo}) => {
                     deleteTodo={deleteTodo} />)}
                 </MDBTableBody>
             </MDBTable>
-            <Link to='/todos/create'>Create Todo</Link>
+            <MDBBtn tag="a" color="info" href="#/todos/create" className="marginBottom16">Create Todo</MDBBtn>
         </div>
     )
 }
