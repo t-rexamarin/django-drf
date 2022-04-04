@@ -25,11 +25,14 @@ SECRET_KEY = 'django-insecure-gp#^jz3l=4(kt!9kkyp)u$x67f)45vdjxx@b@p#4wdydhrw78k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
    "http://localhost:3000",
    "http://127.0.0.1:3000",
+   "http://0.0.0.0:3000",
+   "http://0.0.0.0:8080",
+   "http://0.0.0.0:8000",
 ]
 
 INSTALLED_APPS = [
@@ -109,7 +112,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         # 'DIRS': [],
-        'DIRS': [ BASE_DIR / 'frontend/build'],
+        # 'DIRS': [BASE_DIR / 'frontend/build'],
+        'DIRS': [BASE_DIR / '../../frontend/build'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,10 +132,22 @@ WSGI_APPLICATION = 'todo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'db',
+        'USER': 'django',
+        'PASSWORD': '1',
+        'HOST': 'db',
+        # 'HOST': '127.0.0.1',
+        'PORT': '5432'
     }
 }
 
@@ -175,7 +191,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (BASE_DIR / 'frontend/build/static/',)
+STATICFILES_DIRS = (BASE_DIR / '../../frontend/build/static/',)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
